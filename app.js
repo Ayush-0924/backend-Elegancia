@@ -1,10 +1,21 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('node:fs/promises');
 
-const { getStoredItems, storeItems } = require('./items');
-
+// const { getStoredItems, storeItems } = require('./data/items');
 
 const app = express();
+
+async function getStoredItems() {
+  const rawFileContent = await fs.readFile('items.json', { encoding: 'utf-8' });
+  const data = JSON.parse(rawFileContent);
+  const storedItems = data.items ?? [];
+  return storedItems;
+}
+
+function storeItems(items) {
+  return fs.writeFile('items.json', JSON.stringify({ items: items || [] }));
+}
 
 app.use(bodyParser.json());
 
@@ -39,13 +50,4 @@ app.post('/items', async (req, res) => {
   res.status(201).json({ message: 'Stored new item.', item: newItem });
 });
 
-app.get('/', (req, res) => {
-  res.send('Welcome to the API');
-});
-
-const PORT = 8080;
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
+app.listen(8080);
