@@ -1,7 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { getStoredItems, storeItems } = require('./data/items');
+const { getStoredItems, storeItems } = require('./items');
+
 
 const app = express();
 
@@ -42,5 +43,9 @@ app.get('/', (req, res) => {
   res.send('Welcome to the API');
 });
 
+const PORT = 8080;
 
-app.listen(8080);
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+
