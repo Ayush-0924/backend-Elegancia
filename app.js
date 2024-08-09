@@ -1,21 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('node:fs/promises');
 
-// const { getStoredItems, storeItems } = require('./data/items');
+const { getStoredItems, storeItems } = require('./data/items');
 
-const app = express();
+const fs = require('fs');
+const path = require('path');
 
 async function getStoredItems() {
-  const rawFileContent = await fs.readFile('items.json', { encoding: 'utf-8' });
-  const data = JSON.parse(rawFileContent);
-  const storedItems = data.items ?? [];
-  return storedItems;
+  const filePath = path.resolve(__dirname, 'data', 'items.json');
+  const data = await fs.promises.readFile(filePath, 'utf8');
+  return JSON.parse(data);
 }
 
-function storeItems(items) {
-  return fs.writeFile('items.json', JSON.stringify({ items: items || [] }));
-}
+
+const app = express();
 
 app.use(bodyParser.json());
 
