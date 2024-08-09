@@ -38,4 +38,9 @@ app.post('/items', async (req, res) => {
   res.status(201).json({ message: 'Stored new item.', item: newItem });
 });
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the API');
+});
+
+
 app.listen(8080);
